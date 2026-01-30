@@ -1,0 +1,78 @@
+[
+  {
+    "title": "Waterfall",
+    "description": "Everyone drinks in sequence",
+    "type": "simple",
+    "quantity": 4
+  },
+  {
+    "title": "Lucky",
+    "description": "Only drink 2 sips for the next 2 rounds",
+    "type": "simple",
+    "multiRound": true,
+    "rounds": 2,
+    "quantity": 2
+  },
+  {
+    "title": "91",
+    "description": "Put a previously drawn card back into the deck",
+    "type": "reinsert",
+    "quantity": 2
+  },
+  {
+    "title": "PENALTY",
+    "description": "DOWN YOUR DRINK",
+    "type": "simple",
+    "quantity": 1
+  },
+  {
+    "title": "CHOSE PENALTY",
+    "description": "Choose someone to down his drink",
+    "type": "simple",
+    "quantity": 1
+  },
+  {
+    "title": "GAME",
+    "description": "Choose someone to down his drink",
+    "type": "choice",
+    "quantity": 4
+  },
+  {
+    "title": "LUCKY drink 4",
+    "description": "For the rest of the game, drink only 4 sips each time you need to drink and give out the rest",
+    "type": "simple",
+    "multiRound": true,
+    "rounds": 200,
+    "quantity": 1
+  },
+  {
+    "title": "CHALLENGE",
+    "description": "Decide a challenge you need to do or chose a number between 1 and 20",
+    "type": "choice",
+    "quantity": 4
+  },
+  {
+    "title": "UNLUCKY",
+    "description": "All for you the next round",
+    "type": "simple",
+    "multiRound": true,
+    "rounds": 1,
+    "quantity": 1
+  },
+  {
+    "title": "UNLUCKY + 4",
+    "description": "+4 the next 2 Rounds",
+    "type": "simple",
+    "multiRound": true,
+    "rounds": 2,
+    "quantity": 2
+  },
+  {
+    "title": "UNLUCKY x2",
+    "description": "x2 the next 2 Rounds",
+    "type": "simple",
+    "multiRound": true,
+    "rounds": 2,
+    "quantity": 2
+  }
+]
