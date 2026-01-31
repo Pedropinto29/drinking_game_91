@@ -13,7 +13,7 @@ class GameCard {
     required this.title,
     required this.description,
     required this.type,
-    this.multiRound = false,
+    required this.multiRound,
     this.rounds,
   });
 }

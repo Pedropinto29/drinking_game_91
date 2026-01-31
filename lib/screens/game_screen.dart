@@ -19,30 +19,34 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     gameState = GameState(players: widget.players, deck: widget.deck);
+  }
 
-    if (gameState.deck.isNotEmpty) {
-      gameState.discarded.add(gameState.deck[0]);
+  bool get hasDrawnCard => gameState.discarded.isNotEmpty;
+  bool get isGameOver => gameState.isDeckEmpty;
+
+  void _onButtonPressed() {
+    if (isGameOver) {
+      Navigator.pop(context);
+      return;
     }
-  }
 
-  void _drawCard() {
     setState(() {
-      final card = gameState.drawRandomCard();
-      print('Drawn card: ${card.title}');
+      if (!hasDrawnCard) {
+        gameState.drawRandomCard();
+      } else {
+        gameState.nextTurnAndDraw();
+      }
     });
   }
 
-  void _nextTurn() {
-    setState(() {
-      gameState.nextTurn();
-      final card = gameState.drawRandomCard();
-    });
+  String get mainButtonText {
+    if (isGameOver) return 'Back to Player Setup';
+    if (!hasDrawnCard) return 'Draw Card';
+    return 'Next Turn';
   }
 
   @override
   Widget build(BuildContext context) {
-    final hasCardOnScreen = gameState.discarded.isNotEmpty;
-
     return Scaffold(
       body: Center(
         child: Padding(
@@ -66,16 +70,71 @@ class _GameScreenState extends State<GameScreen> {
                 ),
               ),
 
-              if (hasCardOnScreen)
-                GameCardWidget(card: gameState.discarded.last),
+              if (gameState.currentPlayer.activeEffects.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: gameState.currentPlayer.activeEffects.map((
+                      effect,
+                    ) {
+                      return Text(
+                        '${effect.card.title} : ${effect.remainingRounds} round${effect.remainingRounds > 1 ? 's' : ''} left',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontStyle: FontStyle.italic,
+                          color: Colors.grey,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                switchInCurve: Curves.easeOut,
+                layoutBuilder: (currentChild, previousChildren) {
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      ...previousChildren,
+                      if (currentChild != null) currentChild,
+                    ],
+                  );
+                },
+                transitionBuilder: (child, animation) {
+                  final offsetAnimation = Tween<Offset>(
+                    begin: const Offset(1, 0),
+                    end: Offset.zero,
+                  ).animate(animation);
+
+                  return SlideTransition(
+                    position: offsetAnimation,
+                    child: child,
+                  );
+                },
+                child: hasDrawnCard
+                    ? GameCardWidget(
+                        key: ValueKey(gameState.discarded.last.id),
+                        card: gameState.discarded.last,
+                      )
+                    : const SizedBox.shrink(),
+              ),
+
+              if (isGameOver)
+                const Text(
+                  'Game Over \n All cards have been played',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
 
               const Spacer(),
 
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: hasCardOnScreen ? _nextTurn : _drawCard,
-                  child: Text(hasCardOnScreen ? "Next turn" : "Draw Card"),
+                  onPressed: _onButtonPressed,
+                  child: Text(mainButtonText),
                 ),
               ),
             ],

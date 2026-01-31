@@ -24,7 +24,7 @@ Future<List<GameCard>> loadDeck() async {
             type: CardType.values.firstWhere(
               (e) => e.toString().split('.').last == cardData['type'],
             ),
-            multiRound: cardData['multiround'] ?? false,
+            multiRound: cardData['multiRound'] ?? false,
             rounds: cardData['rounds'],
           ),
         );
