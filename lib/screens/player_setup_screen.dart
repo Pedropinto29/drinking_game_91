@@ -1,3 +1,4 @@
+import 'package:drinking_game_91/models/gameCard.dart';
 import 'package:flutter/material.dart';
 import '../models/player.dart';
 import 'game_screen.dart';
@@ -27,11 +28,13 @@ class _PlayerSetupScreenState extends State<PlayerSetupScreen> {
 
   void _startGame() async {
     final deck = await loadDeck();
+    final freshPlayers = _players.map((player) => Player(player.name)).toList();
+    final freshDeck = List<GameCard>.from(deck);
 
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => GameScreen(players: _players, deck: deck),
+        builder: (_) => GameScreen(players: freshPlayers, deck: freshDeck),
       ),
     );
   }

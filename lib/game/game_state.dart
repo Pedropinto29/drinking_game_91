@@ -39,6 +39,14 @@ class GameState {
     return card;
   }
 
+  void returnCardToDeck(GameCard card) {
+    discarded.remove(card);
+    deck.add(card);
+    deck.shuffle();
+  }
+
+  void _handleNumberSubmitted(int number) {}
+
   GameCard nextTurnAndDraw() {
     nextTurn();
     return drawRandomCard();
